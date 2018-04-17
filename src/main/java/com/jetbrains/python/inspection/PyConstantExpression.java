@@ -36,7 +36,7 @@ public class PyConstantExpression extends PyInspection {
         private void processIfPart(@NotNull PyIfPart pyIfPart) {
             final PyExpression condition = pyIfPart.getCondition();
             if (condition instanceof PyBoolLiteralExpression) {
-                registerProblem(condition, "Condition is always " + ((PyBoolLiteralExpression) condition).getValue());
+                registerProblem(condition, "The condition is always " + ((PyBoolLiteralExpression) condition).getValue());
             }
         }
     }
