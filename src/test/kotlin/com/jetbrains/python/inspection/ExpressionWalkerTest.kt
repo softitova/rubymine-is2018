@@ -75,5 +75,10 @@ class ExpressionWalkerTest {
         assertFalse(ExpressionWalker.walk("not False and False")!!)
         assertFalse(ExpressionWalker.walk("not (1 <= -1 or 5 == 7 or 2 * 3 == 6)")!!)
     }
+
+    @Test
+    fun advancedExpressionsTest() {
+        assertTrue(ExpressionWalker.walk("1 - 1 ==  1 - 1 + 2 * 4 - 3 * 3 + 1")!!)
+    }
 }
 

@@ -1,6 +1,3 @@
-/**
- * Created by Sophia Titova on 12.11.17.
- */
 package com.jetbrains.python.inspection
 
 import antlr.generated.ExpressionLexer
@@ -9,13 +6,13 @@ import org.antlr.v4.runtime.ANTLRInputStream
 import org.antlr.v4.runtime.CommonTokenStream
 
 /**
- * Created by Titova Sophia on 29.10.17.
+ * Created by Sophia Titova on 22.04.18.
  */
 class ExpressionWalker() {
 
     companion object {
 
-        fun walk(text: String) =
+        public fun walk(text: String) =
                 (try {
                 ExpressionParser(
                         CommonTokenStream(
