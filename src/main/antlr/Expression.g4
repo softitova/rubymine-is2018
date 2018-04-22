@@ -9,7 +9,7 @@ expression returns[Boolean val]
     ;
 
 or returns [Boolean val]
-    :   and OR helpOr                         { $val = $and.val || $helpOr.val; }
+    :   and OR t = or                         { $val = $and.val || $t.val; }
     |   and                                   { $val = $and.val; }
     ;
 
@@ -18,25 +18,27 @@ helpOr returns [Boolean val]
     ;
 
 and returns [Boolean val]
-    :   not AND helpAnd                       { $val = $not.val && $helpAnd.val; }
+    :   not AND t = and                       { $val = $not.val && $t.val; }
     |   not                                   { $val = $not.val; }
     ;
 
-helpAnd  returns [Boolean val]
-    : and {$val = $and.val;}
-    ;
-
 not returns [Boolean val]
-    :  NOT expr                               { $val = !$expr.val; }
-    |  expr                                   { $val = $expr.val; }
+    :   NOT expr                               { $val = !$expr.val; }
+    |   expr                                   { $val = $expr.val; }
     ;
 
 expr returns [Boolean val]
-    :  l Operation r
+    :   l = rVal Operation r = rVal
     {
+
         $val = (($Operation.text.equals("==") && $l.val == $r.val) ||
+                ($Operation.text.equals("!=") && $l.val != $r.val) ||
                 ($Operation.text.equals("<") && $l.val < $r.val) ||
-                ($Operation.text.equals(">") && $l.val > $r.val));
+                ($Operation.text.equals("<=") && $l.val <= $r.val) ||
+                ($Operation.text.equals(">") && $l.val > $r.val) ||
+                ($Operation.text.equals(">=") && $l.val >= $r.val));
+
+        System.out.println($l.val + " " + $r.val);
     }
     |  Boolean
     {
@@ -49,22 +51,17 @@ expr returns [Boolean val]
     | '(' expression ')'                       { $val = $expression.val; }
     ;
 
-
-l returns [int val]
-    : rVal {$val = $rVal.val;};
-
-r  returns [int val]
-    : rVal {$val = $rVal.val;};
-
 rVal returns [int val]
     :term expr1[$term.val]                     { $val = $expr1.val; }
     ;
 
 
 expr1[int i] returns [int val]
-    : '+' term expr1[$i + $term.val]           { $val = $expr1.val; }
-    | '-' term expr1[$i - $term.val]           { $val = $expr1.val; }
-    |                                          { $val = $i; }
+    : '+' term t = expr1[$i + $term.val]           { $val = $t.val; }
+    | '-' term t = expr1[$i - $term.val]           { $val = $t.val; }
+    |                                          {
+    System.out.println($i + " i in expr 1 shoul be sum");
+    $val = $i; }
     ;
 
 
@@ -101,7 +98,7 @@ Digit : [0-9$];
 //LetterOrDigit: [a-zA-Z0-9$_] ;
 //operation : G | S | E | NE | GE | SE;
 
-Operation : '<' | '>' | '==' ;
+Operation : '<' | '>' | '==' | '<=' | '>=' |  '!=';
 WS : [ \t\r\n\u000C]+ -> skip;
 AND : 'and';
 OR  : 'or';

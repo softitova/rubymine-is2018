@@ -33,5 +33,5 @@ class ExpressionWalker() {
 
 fun main(args: Array<String>) {
     val INPUT_FILE = "input.txt"
-    print(ExpressionWalker.walk(" 1 - 1 + 1 == 2 - 2 + 1 and True"))
+    print(ExpressionWalker.walk("1 - 1 ==  0 - 3 * 3 + 1"))
 }
